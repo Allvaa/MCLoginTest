@@ -21,15 +21,16 @@ public class MCLogin {
         loginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String[] list = textArea1.getText().split("\n");
+                String newstr = "";
                 try {
                     for (String usernpass: list) {
                         if (usernpass.equals("")) {
-                            infoLabel.setText("Please input the field");
+                            infoLabel.setText("Make sure the field isn't empty!");
                             return;
                         }
                         String[] arr =  usernpass.split(":");
                         if (arr.length < 2) {
-                            infoLabel.setText("Missing email/username or password");
+                            infoLabel.setText("Missing email or password.");
                             return;
                         }
 
@@ -49,10 +50,19 @@ public class MCLogin {
                         Thread.sleep(2 * 1000);
 
                         String status = usernpass;
-                        if (res.getStatus() == 200) status += " (OK)";
-                        else if (res.getStatus() == 403) status += " (Failed)";
-                        else status += " (Unknown Error)";
-                        infoLabel.setText(infoLabel.getText().equals("") ? infoLabel.getText() + status : infoLabel.getText() + "\n" + status);
+                        switch (res.getStatus()) {
+                            case 200:
+                                status += " (OK)";
+                                break;
+                            case 403:
+                                status += " (Failed)";
+                                break;
+                            default:
+                                status += " (Unknown Error)";
+                                break;
+                        }
+                        String strlist = newstr += status + "\n";
+                        infoLabel.setText(infoLabel.getText().equals("") ? infoLabel.getText() + status : strlist);
                     }
                 } catch (InterruptedException err) {
                     err.printStackTrace();
